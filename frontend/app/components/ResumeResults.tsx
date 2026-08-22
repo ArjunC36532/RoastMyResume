@@ -143,7 +143,7 @@ export default function ResumeResults({
       );
 
       const response = await fetch(
-        `${resumeApiUrl.replace(/\/$/, "")}/api/resume/upload`,
+        `${resumeApiUrl}/api/resume/upload`,
         {
           method: "POST",
           headers: {
