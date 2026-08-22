@@ -9,8 +9,11 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url,
 ).toString();
 
-const resumeApiUrl =
-  process.env.NEXT_PUBLIC_RESUME_API_URL ?? "http://localhost:8080";
+const resumeApiUrl = process.env.NEXT_PUBLIC_RESUME_API_URL;
+
+if (!resumeApiUrl) {
+  throw new Error("NEXT_PUBLIC_RESUME_API_URL is not set");
+}
 
   type Props = {
     file: File;

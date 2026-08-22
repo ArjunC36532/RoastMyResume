@@ -11,6 +11,7 @@ import com.roastmyresume.api.model.WordPosition;
 import com.roastmyresume.api.text.PositionalTextStripper;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import tools.jackson.databind.JsonNode;
@@ -30,10 +31,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class ResumeAiReviewService {
-
-    // TODO: temporary - move back to the OPENAI_API_KEY environment variable before committing.
-    private static final String API_KEY =
-            "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";
 
     private static final String MODEL = "gpt-5.5";
 
@@ -148,10 +145,12 @@ public class ResumeAiReviewService {
     private final OpenAIClient openAIClient;
     private final ObjectMapper objectMapper;
 
-    public ResumeAiReviewService(ObjectMapper objectMapper) {
+    public ResumeAiReviewService(
+            ObjectMapper objectMapper,
+            @Value("${openai.api-key}") String apiKey) {
         this.objectMapper = objectMapper;
         this.openAIClient = OpenAIOkHttpClient.builder()
-                .apiKey(API_KEY)
+                .apiKey(apiKey)
                 .build();
     }
 

@@ -1,6 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
 
-const RESUME_API_URL = process.env.RESUME_API_URL ?? "http://localhost:8080";
+const RESUME_API_URL = process.env.RESUME_API_URL;
+
+if (!RESUME_API_URL) {
+  throw new Error("RESUME_API_URL is not set");
+}
 
 export const maxDuration = 120;
 
