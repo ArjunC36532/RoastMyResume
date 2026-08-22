@@ -1,0 +1,15 @@
+.env
+.env.*
+.git
+.gitignore
+.gradle
+.idea
+.vscode
+build
+bin
+out
+*.iml
+*.log
+.DS_Store
+feedback.json
+roast.json
