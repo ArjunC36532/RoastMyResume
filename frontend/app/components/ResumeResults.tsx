@@ -1,6 +1,5 @@
 "use client";
 
-import { useAuth } from "@clerk/nextjs";
 import { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
@@ -9,13 +8,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url,
 ).toString();
 
-const resumeApiUrl = process.env.NEXT_PUBLIC_RESUME_API_URL;
-
-if (!resumeApiUrl) {
-  throw new Error("NEXT_PUBLIC_RESUME_API_URL is not set");
-}
-
-  type Props = {
+type Props = {
     file: File;
     review: RoastReview;
     showSaveAction?: boolean;
@@ -119,7 +112,6 @@ export default function ResumeResults({
   review,
   showSaveAction = true,
 }: Props) {
-  const { getToken } = useAuth();
   const [numPages, setNumPages] = useState(0);
   const [saving, setSaving] = useState(false);
   const [savedPath, setSavedPath] = useState<string | null>(null);
@@ -130,11 +122,6 @@ export default function ResumeResults({
     setSaveError(null);
 
     try {
-      const token = await getToken();
-      if (!token) {
-        throw new Error("Your session has expired. Please sign in again.");
-      }
-
       const form = new FormData();
       form.append("file", file, file.name);
       form.append(
@@ -142,16 +129,10 @@ export default function ResumeResults({
         new Blob([JSON.stringify(review)], { type: "application/json" }),
       );
 
-      const response = await fetch(
-        `${resumeApiUrl}/api/resume/upload`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: form,
-        },
-      );
+      const response = await fetch("/api/save", {
+        method: "POST",
+        body: form,
+      });
       const payload = (await response.json().catch(() => ({}))) as {
         path?: string;
         error?: string;
